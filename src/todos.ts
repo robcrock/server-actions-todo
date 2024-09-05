@@ -43,3 +43,15 @@ export async function deleteTodo(id: string): Promise<void> {
   await fs.writeFile("todos.json", JSON.stringify(updatedTodos, null, 2))
   revalidateTag("todo-list")
 }
+
+export async function updateTodo(id: string, updates: Partial<Todo>): Promise<Todo> {
+  const todos = await getTodos()
+  const todoIndex = todos.findIndex(todo => todo.id === id)
+  if (todoIndex === -1) {
+    throw new Error("Todo not found")
+  }
+  todos[todoIndex] = { ...todos[todoIndex], ...updates }
+  await fs.writeFile("todos.json", JSON.stringify(todos, null, 2))
+  revalidateTag("todo-list")
+  return todos[todoIndex]
+}
