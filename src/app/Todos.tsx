@@ -3,7 +3,7 @@
 import { Todo } from "@/todos"
 import { useState } from "react"
 
-import {addTodo} from "@/todos"
+import { addTodo, deleteTodo } from "@/todos"
 
 export default function Todos({todos, todoCount}: {todos: Todo[], todoCount: number}) {
   const [newTodo, setNewTodo] = useState("")
@@ -14,13 +14,23 @@ export default function Todos({todos, todoCount}: {todos: Todo[], todoCount: num
     setNewTodo("")
   }
 
+  const handleDelete = (id: string) => {
+    deleteTodo(id)
+  }
+
   return (
     <div className="space-y-6">
       <p className="text-gray-800 font-medium">Total Todos: {todoCount}</p>
       <ul className="space-y-2">
         {todos.map((todo) => (
-          <li key={todo.id} className="bg-gray-50 p-3 rounded-md shadow-sm text-gray-800 font-medium">
+          <li key={todo.id} className="bg-gray-50 p-3 rounded-md shadow-sm text-gray-800 font-medium flex justify-between items-center">
             {todo.title}
+            <button
+              onClick={() => handleDelete(todo.id)}
+              className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>

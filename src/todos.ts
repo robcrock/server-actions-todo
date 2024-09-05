@@ -36,3 +36,10 @@ export async function addTodo(title: string): Promise<Todo> {
   revalidateTag("todo-list")
   return newTodo
 }
+
+export async function deleteTodo(id: string): Promise<void> {
+  const todos = await getTodos()
+  const updatedTodos = todos.filter(todo => todo.id !== id)
+  await fs.writeFile("todos.json", JSON.stringify(updatedTodos, null, 2))
+  revalidateTag("todo-list")
+}
